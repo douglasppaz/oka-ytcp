@@ -4,8 +4,8 @@
   "description": "OKa Youtube Cached Player - Web App",
   "main": "index.js",
   "scripts": {
-    "start": "webpack --watch --env.dev",
     "dist": "npm run test && webpack",
+    "start": "webpack --watch --env.dev",
     "test": "eslint src/**.js src/**.jsx"
   },
   "author": "Douglas Paz",
