@@ -4,8 +4,16 @@
   "description": "OKa Youtube Cached Player - Web App",
   "main": "index.js",
   "scripts": {
+    "start": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "html-webpack-plugin": "^2.28.0",
+    "html-webpack-pug-plugin": "0.0.3",
+    "pug": "^2.0.0-beta11",
+    "pug-loader": "^2.3.0",
+    "webpack": "^2.2.1"
+  }
 }
