@@ -4,7 +4,8 @@
   "description": "OKa Youtube Cached Player",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "concurrently \"npm test --prefix webapp\"",
+    "test": "npm test --prefix webapp"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/douglasppaz/oka-ytcp/issues"
   },
-  "homepage": "https://github.com/douglasppaz/oka-ytcp#readme"
+  "homepage": "https://github.com/douglasppaz/oka-ytcp#readme",
+  "dependencies": {
+    "concurrently": "^3.4.0"
+  }
 }
