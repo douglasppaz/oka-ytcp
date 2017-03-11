@@ -7,13 +7,18 @@ module.exports = env => {
   const { dev } = env || {};
 
   let webpackConfig = {
-    entry: './src/index.js',
+    entry: './src/index.jsx',
     output: {
       filename: 'bundle.js',
       path: path.resolve(__dirname, dev ? distDevPath : 'dist')
     },
     module: {
       rules: [
+        {
+          test: /\.(js|jsx)$/,
+          loader: 'babel-loader',
+          query: { presets: ['env', 'react'] }
+        },
         { test: /\.pug$/, loader: 'pug-loader' }
       ]
     },
