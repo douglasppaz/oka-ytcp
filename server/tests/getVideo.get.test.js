@@ -11,7 +11,7 @@ describe('getVideo.get()', () => {
         value: 'abc',
         func: done => (code) => {
           if(code === NOT_FOUND) return done();
-          return done(new Error('o vídeo existe'));
+          return done(new Error(`o código de erro é ${code}`));
         }
       }
     ];
