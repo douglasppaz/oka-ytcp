@@ -21,8 +21,9 @@ app.get('/', (req, res) => {
 });
 
 app.get('/v/', (req, res) => {
-  get(keys(req.query));
-  JsonResponse(res, {});
+  get(keys(req.query))
+    .then(infos => JsonResponse(res, { infos }))
+    .catch(code => JsonResponse(res, { code }));
 });
 
 /**
