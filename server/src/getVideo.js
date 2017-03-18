@@ -16,7 +16,6 @@ export const get = (ids) => current().then(config => Promise.all(map(isArray(ids
     youtubedl.getInfo(
       ytURL,
       (error, info) => {
-        console.log(error, info);
         if (error) return reject(error.code);
         resolve(info);
       }
