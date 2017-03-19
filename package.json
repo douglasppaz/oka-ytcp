@@ -4,7 +4,7 @@
   "description": "OKa Youtube Cached Player",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm test --prefix webapp\"",
+    "start": "concurrently \"npm start --prefix webapp\" \"npm start --prefix server\"",
     "test": "npm test --prefix webapp"
   },
   "repository": {

@@ -1,22 +1,32 @@
 import fs from 'fs-extra'
 import os from 'os';
 import { defaults } from 'lodash';
+import Queue from 'promise-queue';
 
 import packageInfo from '../../package.json';
 
 const CONFIG_PATH = './config.json';
-export let currrentConfig = {};
+const updateConfigFileQueue = new Queue(1, 9999);
 
-const updateConfigFile = config => new Promise(resolve => {
-  fs.writeFile(CONFIG_PATH, JSON.stringify(config), (err) => {
+let currrentConfig = {};
+
+const updateCurrentConfig = () => {
+  currrentConfig = fs.readJsonSync(CONFIG_PATH);
+  fs.ensureDirSync(currrentConfig.videosPath);
+  return Promise.resolve();
+};
+
+const updateConfigFile = (config) => new Promise((resolve, reject) => {
+  fs.writeJson(CONFIG_PATH, config, (err) => {
     if (err) return reject(err);
-    return resolve();
+    return updateCurrentConfig()
+      .then(resolve, reject);
   });
 });
 
 export const updateConfig = (newConfig) => {
   currrentConfig = defaults(newConfig, currrentConfig);
-  return updateConfigFile(currrentConfig);
+  return updateConfigFileQueue.add(() => updateConfigFile(currrentConfig));
 };
 
 const checkConfig = () => {
@@ -32,9 +42,7 @@ const checkConfig = () => {
 };
 
 export const loadConfig = () => checkConfig()
-    .then(() => {
-      currrentConfig = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
-      console.log('Configurações Carregadas');
-    });
+  .then(updateCurrentConfig)
+  .then(() => console.log('Configurações Carregadas'));
 
 export const current = () => Promise.resolve(currrentConfig);
