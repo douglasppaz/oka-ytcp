@@ -5,7 +5,7 @@ import { defaults } from 'lodash';
 import packageInfo from '../../package.json';
 
 const CONFIG_PATH = './config.json';
-let currrentConfig = {};
+export let currrentConfig = {};
 
 const updateConfigFile = config => new Promise(resolve => {
   fs.writeFile(CONFIG_PATH, JSON.stringify(config), (err) => {
@@ -24,7 +24,7 @@ const checkConfig = () => {
     const defaultConfig = {
       name: packageInfo.name,
       version: packageInfo.version,
-      videosPath: `${os.homedir()}/OKaVideos/`
+      videosPath: `${os.homedir()}/OKaVideos`
     };
     return updateConfig(defaultConfig);
   }
@@ -32,6 +32,9 @@ const checkConfig = () => {
 };
 
 export const loadConfig = () => checkConfig()
-    .then(() => console.log('Configurações Carregadas'));
+    .then(() => {
+      currrentConfig = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf8'));
+      console.log('Configurações Carregadas');
+    });
 
 export const current = () => Promise.resolve(currrentConfig);
