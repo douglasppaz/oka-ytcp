@@ -24,10 +24,10 @@ const updateConfigFile = (config) => new Promise((resolve, reject) => {
   });
 });
 
-export const updateConfig = (newConfig) => {
-  currrentConfig = defaults(newConfig, currrentConfig);
-  return updateConfigFileQueue.add(() => updateConfigFile(currrentConfig));
-};
+export const updateConfig = newConfig => updateConfigFileQueue.add(() => {
+  config = defaults(newConfig, currrentConfig);
+  updateConfigFile(config);
+});
 
 const checkConfig = () => {
   if (!fs.existsSync(CONFIG_PATH)) {
