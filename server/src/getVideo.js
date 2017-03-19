@@ -4,10 +4,13 @@ import youtubedl from 'youtube-dl';
 
 import { current } from './config';
 
+const ytURLTemplate = template('http://www.youtube.com/watch?v=<%= id %>');
+
 
 /**
  * Retorna o caminho do arquivo .oka
  * @param id
+ * @returns {Promise.<T>}
  */
 const getDotOkaPath = id => current()
   .then((config) => {
@@ -19,9 +22,10 @@ const getDotOkaPath = id => current()
  * Cria/atualiza arquivo .oka
  * @param id
  * @param dotOkaPath
+ * @returns {Promise.<T>}
  */
 const dotOka = (id, dotOkaPath) => new Promise((resolve, reject) => {
-  const ytURL = `http://www.youtube.com/watch?v=${id}`;
+  const ytURL = ytURLTemplate({ id });
 
   youtubedl.getInfo(
     ytURL,
@@ -63,6 +67,7 @@ const dotOka = (id, dotOkaPath) => new Promise((resolve, reject) => {
 /**
  * Adiciona a lista de downloads os vídeos dos IDs recebido no parametro
  * @param ids
+ * @returns {Promise.<T>}
  */
 export const get = ids => Promise.all(map(isArray(ids) ? ids : [ids], (id) => {
   if (!isString(id)) return Promise.reject(id);
@@ -71,4 +76,33 @@ export const get = ids => Promise.all(map(isArray(ids) ? ids : [ids], (id) => {
       if (!fs.existsSync(dotOkaPath)) return dotOka(id, dotOkaPath);
       return Promise.resolve(fs.readJsonSync(dotOkaPath));
     });
+}));
+
+/**
+ *
+ * @param id
+ * @returns {Promise.<T>}
+ */
+export const download = id => Promise.all([
+  current(),
+  get(id)
+]).then(([config, info]) => new Promise((resolve, reject) => {
+  const { videosPath } = config;
+  const { filename } = info[0];
+  const filePath = `${videosPath}/${filename}`;
+
+  let downloaded = fs.existsSync(filePath) ? fs.statSync(filePath).size : 0;
+
+  const v = youtubedl(
+    ytURLTemplate({ id }),
+    [],
+    {
+      start: downloaded,
+      cwd: videosPath
+    }
+  );
+
+  v.pipe(fs.createWriteStream(filePath, { flags: 'a' }));
+
+  v.on('end', resolve);
 }));

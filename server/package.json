@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon --watch src -e js --exec babel-node ./src/index.js",
-    "test": "mocha --compilers js:babel-core/register --timeout 20000 -c tests/**/*.test.js",
-    "test:watch": "mocha --compilers js:babel-core/register --timeout 20000 -c -w tests/**/*.test.js"
+    "test": "mocha --compilers js:babel-core/register --timeout 3600000 -c tests/**/*.test.js",
+    "test:watch": "mocha --compilers js:babel-core/register --timeout 3600000 -c -w tests/**/*.test.js"
   },
   "author": "Douglas Paz",
   "license": "MIT",

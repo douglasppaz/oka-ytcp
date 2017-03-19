@@ -1,4 +1,4 @@
-import { get } from '../src/getVideo';
+import { get, download } from '../src/getVideo';
 import { loadConfig } from '../src/config';
 import { NOT_FOUND } from '../src/errorsCode.json';
 
@@ -27,17 +27,26 @@ describe('getVideo.get()', () => {
     });
   });
 
-  loadConfig()
-    .then(() => {
-      describe('Baixando vídeo', () => {
-        const validId = '841VcS9IxDc';
-        let video;
+  describe('Baixar vídeo com ID válido', () => {
+    const validId = 'OVo2b6etaOM';
 
-        it('adicionando no vídeo na lista de downloads', (done) => {
-          let video = get(validId)
-            .then(() => done())
-            .catch(() => done(new Error('Nâo foi possível adicionar o vídeo na lista de downloads')));
-        });
+    let video;
+
+    it('carregando configurações', (done) => {
+      loadConfig().then(done);
+    });
+
+    it('adicionar vídeo na lista de downloads', (done) => {
+      video = get(validId)
+        .then(() => done())
+        .catch(() => done(new Error('Nâo foi possível adicionar o vídeo na lista de downloads')));
+    });
+
+    it('baixando...', (done) => {
+      video.then(() => {
+        download(validId)
+          .then(done);
       });
     });
+  });
 });
