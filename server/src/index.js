@@ -4,9 +4,10 @@ import { keys } from 'lodash';
 import packageInfo from '../../package.json';
 import { SERVER_PORT } from '../../globalVars.json';
 
-import { JsonResponse } from './utils';
-import { loadConfig, current } from './config';
+import { JsonResponse, getErrorLabel } from './utils';
+import { loadConfig } from './config';
 import { get } from './getVideo';
+
 
 /**
  * Configurações do servidor HTTP
@@ -23,7 +24,10 @@ app.get('/', (req, res) => {
 app.get('/v/', (req, res) => {
   get(keys(req.query))
     .then(infos => JsonResponse(res, { infos }))
-    .catch(code => JsonResponse(res, { code }));
+    .catch(code => JsonResponse(res, {
+      code,
+      label: getErrorLabel(code)
+    }));
 });
 
 /**
