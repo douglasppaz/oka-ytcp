@@ -37,7 +37,12 @@ module.exports = env => {
         template: './src/index.pug',
         filetype: 'pug'
       })
-    ]
+    ],
+    node: {
+      fs: 'empty',
+      net: 'empty',
+      tls: 'empty'
+    }
   };
 
   if (dev) {

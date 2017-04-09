@@ -8,6 +8,7 @@ import {
   Route,
 } from 'react-router-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import SearchServer from './components/SearchServer';
 
 import Home from './routes/Home';
 import NoMatch from './routes/NoMatch';
@@ -23,12 +24,14 @@ ReactDOM.render(
   (
     <Provider store={store}>
       <MuiThemeProvider>
-        <Router>
-          <Switch>
-            <Route path="/" exact component={Home}/>
-            <Route component={NoMatch}/>
-          </Switch>
-        </Router>
+        <SearchServer>
+          <Router>
+            <Switch>
+              <Route path="/" exact component={Home}/>
+              <Route component={NoMatch}/>
+            </Switch>
+          </Router>
+        </SearchServer>
       </MuiThemeProvider>
     </Provider>
   ),
