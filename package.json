@@ -4,6 +4,7 @@
   "description": "OKa Youtube Cached Player",
   "main": "index.js",
   "scripts": {
+    "postinstall": "cd desktopapp/ && npm i && cd ../server/ && npm i && cd ../webapp/ && npm i",
     "start": "concurrently \"npm start --prefix webapp\" \"npm start --prefix server\"",
     "test": "npm test --prefix webapp"
   },
