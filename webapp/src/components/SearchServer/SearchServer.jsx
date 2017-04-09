@@ -8,7 +8,7 @@ import request from 'request-promise';
 import { SERVER_PORT } from '../../../../constants.json';
 import { name, version } from '../../../../package.json';
 
-const searchServerQueue = new Queue(1, Infinity);
+const searchServerQueue = new Queue(100, Infinity);
 
 const verboseStatus = {
   [-2]: 'não verificado',
@@ -18,10 +18,11 @@ const verboseStatus = {
   2: 'versão diferente',
 };
 
+
 class SearchServer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { found: false, addrs: {} };
+    this.state = { selected: false, addrs: {} };
   }
 
   componentDidMount() {
@@ -62,12 +63,18 @@ class SearchServer extends React.Component {
 
   render() {
     const { addrs } = this.state;
-    const availableAddrs = keys(addrs).map((key) => {
-      const value = addrs[key];
-      return (<div key={key}>{key}: {verboseStatus[value] || value}</div>);
-    });
+    const availableAddrs = keys(addrs)
+      .filter((key) => addrs[key] === 1)
+      .map((key) => {
+        const value = addrs[key];
+        return (<div key={key}>{key}: {verboseStatus[value] || value}</div>);
+      });
+    const unknownAddrsCount = keys(addrs)
+      .filter((key) => [-1, -2].includes(addrs[key]))
+      .length;
     return (
       <div>
+        <p>restantes: {unknownAddrsCount}</p>
         {availableAddrs}
       </div>
     );
