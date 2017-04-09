@@ -1,7 +1,7 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar/AppBar';
 import Drawer from 'material-ui/Drawer/Drawer';
-import { description } from '../../../../constants.json';
+import { TITLE } from '../../../../constants.json';
 
 
 class TopBar extends React.Component {
@@ -20,7 +20,7 @@ class TopBar extends React.Component {
     return (
       <div>
         <AppBar
-          title={description}
+          title={TITLE}
           onLeftIconButtonTouchTap={() => this.toggleDrawer()}
         />
         <Drawer
