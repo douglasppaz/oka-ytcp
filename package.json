@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "cd desktopapp/ && npm i && cd ../server/ && npm i && cd ../webapp/ && npm i",
-    "start": "concurrently \"npm start --prefix webapp\" \"npm start --prefix server\"",
+    "start": "concurrently --prefix \"[{name}]\" --names \"webapp,server\" \"npm start --prefix webapp\" \"npm start --prefix server\"",
     "test": "npm test --prefix webapp"
   },
   "repository": {
