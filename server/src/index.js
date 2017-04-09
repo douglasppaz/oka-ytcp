@@ -2,7 +2,7 @@ import express from 'express';
 import { keys } from 'lodash';
 
 import packageInfo from '../../package.json';
-import { SERVER_PORT } from '../../globalVars.json';
+import { SERVER_PORT } from '../../constants.json';
 
 import { JsonResponse, getErrorLabel } from './utils';
 import { loadConfig } from './config';

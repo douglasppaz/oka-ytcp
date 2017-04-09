@@ -8,7 +8,7 @@ class Layout extends React.Component {
     return (
       <div>
         {topbar !== undefined ? topbar : <TopBar />}
-        <div>{children}</div>
+        {children}
       </div>
     );
   }
