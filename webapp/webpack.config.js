@@ -19,7 +19,16 @@ module.exports = env => {
           loader: 'babel-loader',
           query: { presets: ['env', 'react'] }
         },
-        { test: /\.pug$/, loader: 'pug-loader' }
+        { test: /\.pug$/, loader: 'pug-loader' },
+        {
+          test: /\.scss$/,
+          use: [
+            { loader: 'style-loader' },
+            { loader: 'css-loader' },
+            { loader: 'sass-loader' }
+          ]
+        },
+        { test: /\.(woff2)$/, loader: 'file-loader' }
       ]
     },
     plugins: [
