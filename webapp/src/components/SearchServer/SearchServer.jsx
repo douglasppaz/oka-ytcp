@@ -8,7 +8,7 @@ import request from 'request-promise';
 import { SERVER_PORT } from '../../../../constants.json';
 import { name, version } from '../../../../package.json';
 
-const searchServerQueue = new Queue(100, Infinity);
+const searchServerQueue = new Queue(125, Infinity);
 
 const verboseStatus = {
   [-2]: 'não verificado',
