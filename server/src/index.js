@@ -41,4 +41,5 @@ const runServer = () => app.listen(SERVER_PORT, () => {
  * Carregando configurações e rodando servidor
  */
 loadConfig()
-  .then(runServer);
+  .then(runServer)
+  .catch(console.error);
