@@ -16,3 +16,17 @@ body {
   max-width: calc(100% - 16px);
   margin: 16px auto;
 }
+
+.absoluteInCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.textRight { text-align: right; }
+
+.small {
+  font-size: 12px;
+  color: #7f8c8d;
+}
