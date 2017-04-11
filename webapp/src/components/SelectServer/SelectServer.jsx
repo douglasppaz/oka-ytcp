@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import getLocalAddrs from './getLocalAddrs';
 import Queue from 'promise-queue';
 import keys from 'lodash-es/keys';
@@ -16,21 +16,17 @@ import CloudDone from 'material-ui/svg-icons/file/cloud-done';
 import { SERVER_PORT } from '../../../../constants.json';
 import { name, version } from '../../../../package.json';
 
-const searchServerQueue = new Queue(125, Infinity);
-
-const verboseStatus = {
-  [-2]: 'não verificado',
-  [-1]: 'verificando',
-  0: 'indisponível',
-  1: 'disponível',
-  2: 'versão diferente',
-};
+const selectServerQueue = new Queue(125, Infinity);
 
 
-class SearchServer extends React.Component {
+class SelectServer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { selected: false, addrs: {} };
+    this.state = {
+      selected: false,
+      addrs: {},
+      server: null,
+    };
   }
 
   componentDidMount() {
@@ -41,6 +37,10 @@ class SearchServer extends React.Component {
       range(1, 256)
         .forEach((i) => this.addPosibleAddrs(newAddrSplit.concat(i).join('.')));
     });
+  }
+
+  getChildContext() {
+    return { server: this.state.server };
   }
 
   updateAddrStatus(addr, newStatus) {
@@ -54,7 +54,7 @@ class SearchServer extends React.Component {
   addPosibleAddrs(newAddr) {
     this.updateAddrStatus(newAddr, -2);
 
-    searchServerQueue.add(() => new Promise((resolve) => {
+    selectServerQueue.add(() => new Promise((resolve) => {
       this.updateAddrStatus(newAddr, -1);
       request.get(`http://${newAddr}:${SERVER_PORT}`, { timeout: 1000 })
         .then((response) => {
@@ -80,12 +80,13 @@ class SearchServer extends React.Component {
     const addrsKeysCount = addrsKeys.length;
     const percentage = (verifiedAddrsCount / addrsKeysCount) * 100;
     const availableAddrsItems = availableAddrs.map(ip => (
-      <ListItem leftIcon={<CloudDone />}>{ip}</ListItem>
+      <ListItem key={ip} leftIcon={<CloudDone />}>{ip}</ListItem>
     ));
     return (
       <Card className="container absoluteInCenter">
         <Subheader>Selecione um servidor</Subheader>
-        <List>{availableAddrsItems}</List>
+        {availableAddrsItems.length > 0 && <List>{availableAddrsItems}</List>}
+        {availableAddrsItems.length === 0 && <CardText>Nenhum servidor encontrado</CardText>}
         <CardText>
           <p className="textRight small">{addrsKeysCount} IPs listados e {verifiedAddrsCount} verificados</p>
         </CardText>
@@ -95,4 +96,6 @@ class SearchServer extends React.Component {
   }
 }
 
-export default SearchServer;
+SelectServer.childContextTypes = { server: PropTypes.string };
+
+export default SelectServer;
