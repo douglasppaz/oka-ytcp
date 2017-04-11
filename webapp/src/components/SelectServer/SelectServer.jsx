@@ -70,6 +70,9 @@ class SelectServer extends React.Component {
   }
 
   render() {
+    const { server } = this.state;
+    if (server) return this.props.children;
+    
     const { addrs } = this.state;
     const addrsKeys = keys(addrs);
     const availableAddrs = addrsKeys
@@ -80,7 +83,11 @@ class SelectServer extends React.Component {
     const addrsKeysCount = addrsKeys.length;
     const percentage = (verifiedAddrsCount / addrsKeysCount) * 100;
     const availableAddrsItems = availableAddrs.map(ip => (
-      <ListItem key={ip} leftIcon={<CloudDone />}>{ip}</ListItem>
+      <ListItem
+        key={ip}
+        leftIcon={<CloudDone />}
+        onTouchTap={() => this.setState({ server: ip })}
+      >{ip}</ListItem>
     ));
     return (
       <Card className="container absoluteInCenter">
