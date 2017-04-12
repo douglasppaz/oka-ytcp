@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import SelectServer from './components/SelectServer';
+import WebSocketConnect from './components/WebSocketConnect';
 
 import Home from './routes/Home';
 import NoMatch from './routes/NoMatch';
@@ -25,12 +26,14 @@ ReactDOM.render(
     <Provider store={store}>
       <MuiThemeProvider>
         <SelectServer>
-          <Router>
-            <Switch>
-              <Route path="/" exact component={Home}/>
-              <Route component={NoMatch}/>
-            </Switch>
-          </Router>
+          <WebSocketConnect>
+            <Router>
+              <Switch>
+                <Route path="/" exact component={Home}/>
+                <Route component={NoMatch}/>
+              </Switch>
+            </Router>
+          </WebSocketConnect>
         </SelectServer>
       </MuiThemeProvider>
     </Provider>

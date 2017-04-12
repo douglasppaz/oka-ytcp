@@ -104,5 +104,6 @@ class SelectServer extends React.Component {
 }
 
 SelectServer.childContextTypes = { server: PropTypes.string };
+SelectServer.propTypes = { children: PropTypes.node };
 
 export default SelectServer;

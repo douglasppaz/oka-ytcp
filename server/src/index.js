@@ -1,5 +1,6 @@
 import express from 'express';
 import { keys } from 'lodash';
+import expressWs from 'express-ws';
 
 import packageInfo from '../../package.json';
 import { SERVER_PORT } from '../../constants.json';
@@ -13,6 +14,7 @@ import { get } from './getVideo';
  * Configurações do servidor HTTP
  */
 const app = express();
+const ws = expressWs(app);
 
 app.get('/', (req, res) => {
   JsonResponse(res, {
@@ -28,6 +30,11 @@ app.get('/v/', (req, res) => {
       code,
       label: getErrorLabel(code)
     }));
+});
+
+app.ws('/', (ws, req) => {
+  ws.send('open');
+  // ws.on('message', console.log);
 });
 
 /**
