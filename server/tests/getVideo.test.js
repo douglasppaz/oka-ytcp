@@ -33,7 +33,7 @@ describe('getVideo.get()', () => {
     let video;
 
     it('carregando configurações', (done) => {
-      loadConfig().then(done);
+      loadConfig().then(() => done());
     });
 
     it('adicionar vídeo na lista de downloads', (done) => {

@@ -17,7 +17,6 @@ let currrentConfig = null;
 
 const loadCurrentConfig = () => {
   currrentConfig = fs.readJsonSync(CONFIG_PATH);
-  fs.ensureDirSync(currrentConfig.videosPath);
   return Promise.resolve(currrentConfig);
 };
 
@@ -41,4 +40,7 @@ export const loadConfig = () => {
   return Promise.resolve(currrentConfig);
 };
 
-export const current = () => Promise.resolve(currrentConfig);
+export const current = () => {
+  if (!currrentConfig) return loadConfig();
+  return Promise.resolve(currrentConfig);
+};
