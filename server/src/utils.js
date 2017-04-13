@@ -20,3 +20,11 @@ export const JsonResponse = (res, object) => {
  * @param code
  */
 export const getErrorLabel = (code) => findKey(errosCode, v => v == code);
+
+
+/**
+ * Cria objeto para enviar pelo web socket
+ * @param type
+ * @param payload
+ */
+export const wsMessageObject = (type, payload) => JSON.stringify({ type, payload });

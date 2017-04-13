@@ -1,4 +1,7 @@
 {
   "TITLE": "OKa",
-  "SERVER_PORT": 2411
+  "SERVER_PORT": 2411,
+  "REDUX_ACTIONS_TYPES": {
+    "updateAllVideos": "UPDATE_ALL_VIDEOS"
+  }
 }

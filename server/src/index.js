@@ -5,9 +5,14 @@ import expressWs from 'express-ws';
 import packageInfo from '../../package.json';
 import { SERVER_PORT } from '../../constants.json';
 
-import { JsonResponse, getErrorLabel } from './utils';
+import { JsonResponse, getErrorLabel, wsMessageObject } from './utils';
 import { loadConfig } from './config';
 import { get } from './getVideo';
+import { listVideos } from './manager';
+
+import constants from '../../constants.json';
+
+const { REDUX_ACTIONS_TYPES: { updateAllVideos } } = constants;
 
 
 /**
@@ -33,7 +38,8 @@ app.get('/v/', (req, res) => {
 });
 
 app.ws('/', (ws, req) => {
-  ws.send('open');
+  listVideos()
+    .then(videos => ws.send(wsMessageObject(updateAllVideos, { videos })));
   // ws.on('message', console.log);
 });
 
