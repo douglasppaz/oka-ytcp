@@ -45,7 +45,7 @@ describe('getVideo.get()', () => {
     it('baixando...', (done) => {
       video.then(() => {
         download(validId)
-          .then(done);
+          .then(() => done());
       });
     });
   });

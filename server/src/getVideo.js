@@ -1,10 +1,12 @@
 import fs from 'fs-extra';
 import { map, isArray, isString, template } from 'lodash';
 import youtubedl from 'youtube-dl';
+import Queue from 'promise-queue';
 
 import { current } from './config';
 
 const ytURLTemplate = template('http://www.youtube.com/watch?v=<%= id %>');
+const downloadVideoQueue = new Queue(1, Infinity);
 
 
 /**
@@ -79,30 +81,33 @@ export const get = ids => Promise.all(map(isArray(ids) ? ids : [ids], (id) => {
 }));
 
 /**
- *
- * @param id
+ * Adiciona na lista os videos para download
  * @returns {Promise.<T>}
+ * @param ids
  */
-export const download = id => Promise.all([
-  current(),
-  get(id)
-]).then(([config, info]) => new Promise((resolve, reject) => {
-  const { videosPath } = config;
-  const { filename } = info[0];
-  const filePath = `${videosPath}/${filename}`;
+export const download = ids => current()
+  .then(config => Promise.all(map(isArray(ids) ? ids : [ids], (id) => get(id)
+    .then(info => {
+      downloadVideoQueue.add(() => new Promise((resolve, reject) => {
+        const { videosPath } = config;
+        const { filename } = info[0];
+        const filePath = `${videosPath}/${filename}`;
 
-  let downloaded = fs.existsSync(filePath) ? fs.statSync(filePath).size : 0;
+        let downloaded = fs.existsSync(filePath) ? fs.statSync(filePath).size : 0;
 
-  const v = youtubedl(
-    ytURLTemplate({ id }),
-    [],
-    {
-      start: downloaded,
-      cwd: videosPath
-    }
-  );
+        const v = youtubedl(
+          ytURLTemplate({ id }),
+          [],
+          {
+            start: downloaded,
+            cwd: videosPath
+          }
+        );
 
-  v.pipe(fs.createWriteStream(filePath, { flags: 'a' }));
+        v.pipe(fs.createWriteStream(filePath, { flags: 'a' }));
 
-  v.on('end', resolve);
-}));
+        v.on('end', resolve);
+        v.on('error', reject);
+      }));
+      return info;
+    }))));

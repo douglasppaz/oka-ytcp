@@ -12,17 +12,17 @@ class WebSocketConnect extends React.Component {
   }
 
   componentDidMount() {
-    this.connectToWS();
+    this.connect();
   }
 
-  connectToWS() {
+  connect() {
     const { server } = this.context;
     const wsURL = `ws://${server}:${SERVER_PORT}`;
     this.ws = new WebSocket(wsURL);
     this.ws.onopen = () => { this.setState({ open: true }); };
     this.ws.onclose = () => {
       this.setState({ open: false });
-      setTimeout(() => this.connectToWS(), 2000);
+      setTimeout(() => this.connect(), 2000);
     };
     this.ws.onmessage = ({ data }) => {
       if (!data) return false;
