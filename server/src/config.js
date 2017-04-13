@@ -15,6 +15,11 @@ const defaultConfig = {
 
 let currrentConfig = null;
 
+const checkVideosPath = (config) => {
+  fs.ensureDirSync(config.videosPath);
+  return config;
+};
+
 const loadCurrentConfig = () => {
   currrentConfig = fs.readJsonSync(CONFIG_PATH);
   return Promise.resolve(currrentConfig);
@@ -35,9 +40,9 @@ export const updateConfig = newConfig => {
 };
 
 export const loadConfig = () => {
-  if (!fs.existsSync(CONFIG_PATH)) return updateConfig(defaultConfig);
-  if (!currrentConfig) return loadCurrentConfig();
-  return Promise.resolve(currrentConfig);
+  if (!fs.existsSync(CONFIG_PATH)) return updateConfig(defaultConfig).then(checkVideosPath);
+  if (!currrentConfig) return loadCurrentConfig().then(checkVideosPath);
+  return Promise.resolve(currrentConfig).then(checkVideosPath);
 };
 
 export const current = () => {

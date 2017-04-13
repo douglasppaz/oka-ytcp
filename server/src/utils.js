@@ -1,4 +1,5 @@
 import { findKey } from 'lodash';
+import path from 'path';
 
 import errosCode from './errorsCode.json';
 
@@ -28,3 +29,9 @@ export const getErrorLabel = (code) => findKey(errosCode, v => v == code);
  * @param payload
  */
 export const wsMessageObject = (type, payload) => JSON.stringify({ type, payload });
+
+/**
+ * Verifica se o arquivo é .oka
+ * @param filename
+ */
+export const isOkaFilename = filename => path.extname(filename) === '.oka';

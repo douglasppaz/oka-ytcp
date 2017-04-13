@@ -16,6 +16,7 @@
     "fs-extra": "^2.0.0",
     "lodash": "^4.17.4",
     "promise-queue": "^2.2.3",
+    "watch": "^1.0.2",
     "youtube-dl": "^1.11.1"
   },
   "devDependencies": {

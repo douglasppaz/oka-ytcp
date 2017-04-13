@@ -1,13 +1,15 @@
 import express from 'express';
 import { keys } from 'lodash';
 import expressWs from 'express-ws';
+import watch from 'watch';
+import path from 'path';
 
 import packageInfo from '../../package.json';
 import { SERVER_PORT } from '../../constants.json';
 
-import { JsonResponse, getErrorLabel, wsMessageObject } from './utils';
+import { JsonResponse, getErrorLabel, wsMessageObject, isOkaFilename } from './utils';
 import { loadConfig } from './config';
-import { get } from './getVideo';
+import { download } from './getVideo';
 import { listVideos } from './manager';
 
 import constants from '../../constants.json';
@@ -19,7 +21,7 @@ const { REDUX_ACTIONS_TYPES: { updateAllVideos } } = constants;
  * Configurações do servidor HTTP
  */
 const app = express();
-const ws = expressWs(app);
+const appWs = expressWs(app);
 
 app.get('/', (req, res) => {
   JsonResponse(res, {
@@ -29,7 +31,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/v/', (req, res) => {
-  get(keys(req.query))
+  download(keys(req.query))
     .then(infos => JsonResponse(res, { infos }))
     .catch(code => JsonResponse(res, {
       code,
@@ -40,7 +42,6 @@ app.get('/v/', (req, res) => {
 app.ws('/', (ws, req) => {
   listVideos()
     .then(videos => ws.send(wsMessageObject(updateAllVideos, { videos })));
-  // ws.on('message', console.log);
 });
 
 /**
@@ -54,5 +55,21 @@ const runServer = () => app.listen(SERVER_PORT, () => {
  * Carregando configurações e rodando servidor
  */
 loadConfig()
+  .then((config) => new Promise((resolve) => {
+    watch.createMonitor(config.videosPath, (monitor) => {
+      const broadcast = msg => appWs.clients.forEach(client => client.send(msg));
+      const prepareEvent = w => filename => {
+        if (isOkaFilename(filename)) {
+          w(path.basename(filename).substr(1, filename.length - 5));
+        }
+      };
+
+      monitor.on('created', prepareEvent(console.log));
+      monitor.on('changed', prepareEvent(console.log));
+      monitor.on('removed', prepareEvent(console.log));
+
+      resolve();
+    });
+  }))
   .then(runServer)
   .catch(console.error);
