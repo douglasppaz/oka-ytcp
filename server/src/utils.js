@@ -35,3 +35,10 @@ export const wsMessageObject = (type, payload) => JSON.stringify({ type, payload
  * @param filename
  */
 export const isOkaFilename = filename => path.extname(filename) === '.oka';
+
+/**
+ * Envia mensagem para todos os clientes conectados ao WS
+ * @param msg
+ * @param wsApp
+ */
+export const wsBroadcast = (msg, wsApp) => wsApp.clients.forEach(client => client.send(msg));

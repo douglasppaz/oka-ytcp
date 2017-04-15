@@ -3,6 +3,7 @@ import os from 'os';
 import { defaults } from 'lodash';
 import Queue from 'promise-queue';
 
+import { configChanged } from './configObserver';
 import packageInfo from '../../package.json';
 
 const CONFIG_PATH = './config.json';
@@ -14,6 +15,7 @@ const defaultConfig = {
 };
 
 let currrentConfig = null;
+let prevConfig = null;
 
 /**
  * Verifica se o videosPath existe, se não, cria
@@ -51,7 +53,11 @@ const updateConfigFile = (config) => new Promise((resolve, reject) => {
  * @returns {Promise.<T>}
  */
 export const updateConfig = newConfig => {
+  prevConfig = currrentConfig;
   currrentConfig = defaults(newConfig, currrentConfig);
+  if (prevConfig !== currrentConfig) {
+    configChanged(prevConfig, currrentConfig);
+  }
   const currrentConfigCopy = currrentConfig;
   updateConfigFileQueue.add(() => updateConfigFile(currrentConfigCopy));
   return Promise.resolve(currrentConfig);

@@ -1,16 +1,16 @@
 import express from 'express';
 import { keys, map } from 'lodash';
 import expressWs from 'express-ws';
-import watch from 'watch';
-import path from 'path';
 
 import packageInfo from '../../package.json';
 import { SERVER_PORT } from '../../constants.json';
 
-import { JsonResponse, getErrorLabel, wsMessageObject, isOkaFilename } from './utils';
+import { JsonResponse, getErrorLabel, wsMessageObject } from './utils';
 import { loadConfig } from './config';
 import { download } from './getVideo';
 import { listVideos } from './manager';
+import { watchIn } from './watchOkaFiles';
+import { addConfigObserver } from './configObserver';
 
 import constants from '../../constants.json';
 
@@ -21,7 +21,7 @@ const { REDUX_ACTIONS_TYPES: { updateAllVideos } } = constants;
  * Configurações do servidor HTTP
  */
 const app = express();
-const appWs = expressWs(app);
+const wsApp = expressWs(app);
 
 app.get('/', (req, res) => {
   JsonResponse(res, {
@@ -39,7 +39,7 @@ app.get('/v/', (req, res) => {
     }));
 });
 
-app.ws('/', (ws, req) => {
+app.ws('/', (ws) => {
   listVideos()
     .then(videos => ws.send(wsMessageObject(updateAllVideos, { videos })));
 });
@@ -52,24 +52,12 @@ const runServer = () => app.listen(SERVER_PORT, () => {
 });
 
 /**
- * Carregando configurações e rodando servidor
+ * Carregando configurações, assistindo arquivos e rodando servidor
  */
 loadConfig()
-  .then((config) => new Promise((resolve) => {
-    watch.createMonitor(config.videosPath, (monitor) => {
-      const broadcast = msg => appWs.clients.forEach(client => client.send(msg));
-      const prepareEvent = w => filename => {
-        if (isOkaFilename(filename)) {
-          w(path.basename(filename).substr(1, filename.length - 5));
-        }
-      };
-
-      monitor.on('created', prepareEvent(console.log));
-      monitor.on('changed', prepareEvent(console.log));
-      monitor.on('removed', prepareEvent(console.log));
-
-      resolve();
-    });
-  }))
+  .then(config => watchIn(config.videosPath, wsApp))
+  .then(() => addConfigObserver(
+    'videosPath',
+    (videosPath) => watchIn(videosPath, wsApp)))
   .then(runServer)
   .catch(console.error);
