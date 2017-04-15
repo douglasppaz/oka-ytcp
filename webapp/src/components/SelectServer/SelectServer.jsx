@@ -4,6 +4,7 @@ import Queue from 'promise-queue';
 import keys from 'lodash-es/keys';
 import range from 'lodash-es/range';
 import request from 'request-promise';
+import cookie from 'js-cookie';
 
 import Card from 'material-ui/Card/Card';
 import CardText from 'material-ui/Card/CardText';
@@ -22,14 +23,16 @@ const selectServerQueue = new Queue(125, Infinity);
 class SelectServer extends React.Component {
   constructor(props) {
     super(props);
+    const server = cookie.get('server') || null;
     this.state = {
-      selected: false,
+      selected: !!server,
       addrs: {},
-      server: null,
+      server,
     };
   }
 
   componentDidMount() {
+    if (this.state.server) this.addPosibleAddrs(this.state.server);
     getLocalAddrs((newAddr) => {
       this.addPosibleAddrs(newAddr);
       const newAddrSplit = newAddr.split('.');
@@ -44,9 +47,18 @@ class SelectServer extends React.Component {
   }
 
   updateAddrStatus(addr, newStatus) {
+    // -2: não verificado
+    // -1: verificando
+    //  0: não disponível
+    //  1: disponível
+    //  2: versão diferente
     this.setState((state) => {
       const { addrs } = state;
       addrs[addr] = newStatus;
+      if ([0, 2].includes(newStatus) && this.state.server === addr) {
+        this.setState({ selected: false, server: null });
+        cookie.remove('server');
+      }
       return { addrs };
     });
   }
@@ -69,6 +81,11 @@ class SelectServer extends React.Component {
     }));
   }
 
+  select(ip) {
+    this.setState({ server: ip });
+    cookie.set('server', ip);
+  }
+
   render() {
     const { server } = this.state;
     if (server) return this.props.children;
@@ -86,7 +103,7 @@ class SelectServer extends React.Component {
       <ListItem
         key={ip}
         leftIcon={<CloudDone />}
-        onTouchTap={() => this.setState({ server: ip })}
+        onTouchTap={() => this.select(ip)}
       >{ip}</ListItem>
     ));
     return (
