@@ -1,5 +1,5 @@
 import express from 'express';
-import { keys } from 'lodash';
+import { keys, map } from 'lodash';
 import expressWs from 'express-ws';
 import watch from 'watch';
 import path from 'path';
@@ -32,7 +32,7 @@ app.get('/', (req, res) => {
 
 app.get('/v/', (req, res) => {
   download(keys(req.query))
-    .then(infos => JsonResponse(res, { infos }))
+    .then(list => JsonResponse(res, { infos: map(list, (item) => item.info) }))
     .catch(code => JsonResponse(res, {
       code,
       label: getErrorLabel(code)

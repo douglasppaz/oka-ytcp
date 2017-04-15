@@ -86,28 +86,30 @@ export const get = ids => Promise.all(map(isArray(ids) ? ids : [ids], (id) => {
  * @param ids
  */
 export const download = ids => current()
-  .then(config => Promise.all(map(isArray(ids) ? ids : [ids], (id) => get(id)
-    .then(info => {
-      downloadVideoQueue.add(() => new Promise((resolve, reject) => {
-        const { videosPath } = config;
-        const { filename } = info[0];
-        const filePath = `${videosPath}/${filename}`;
+  .then(config => get(ids)
+    .then(infos => {
+      return map(infos, (info) => {
+        const downloadPromise = downloadVideoQueue.add(() => new Promise((resolve, reject) => {
+          const { videosPath } = config;
+          const { id, filename } = info;
+          const filePath = `${videosPath}/${filename}`;
 
-        let downloaded = fs.existsSync(filePath) ? fs.statSync(filePath).size : 0;
+          let downloaded = fs.existsSync(filePath) ? fs.statSync(filePath).size : 0;
 
-        const v = youtubedl(
-          ytURLTemplate({ id }),
-          [],
-          {
-            start: downloaded,
-            cwd: videosPath
-          }
-        );
+          const v = youtubedl(
+            ytURLTemplate({ id }),
+            [],
+            {
+              start: downloaded,
+              cwd: videosPath
+            }
+          );
 
-        v.pipe(fs.createWriteStream(filePath, { flags: 'a' }));
+          v.pipe(fs.createWriteStream(filePath, { flags: 'a' }));
 
-        v.on('end', resolve);
-        v.on('error', reject);
-      }));
-      return info;
-    }))));
+          v.on('end', resolve);
+          v.on('error', reject);
+        }));
+        return { info, downloadPromise };
+      });
+    }));
