@@ -22,7 +22,7 @@ class WebSocketConnect extends React.Component {
     this.ws.onopen = () => { this.setState({ open: true }); };
     this.ws.onclose = () => {
       this.setState({ open: false });
-      setTimeout(() => this.connect(), 2000);
+      setTimeout(() => this.connect(), 5000);
     };
     this.ws.onmessage = ({ data }) => {
       if (!data) return false;
