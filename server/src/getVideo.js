@@ -3,7 +3,7 @@ import { map, isArray, isString, template } from 'lodash';
 import youtubedl from 'youtube-dl';
 import Queue from 'promise-queue';
 
-import { current } from './config';
+import { current, checkVideosPath } from './config';
 
 const ytURLTemplate = template('http://www.youtube.com/watch?v=<%= id %>');
 const downloadVideoQueue = new Queue(1, Infinity);
@@ -86,6 +86,7 @@ export const get = ids => Promise.all(map(isArray(ids) ? ids : [ids], (id) => {
  * @param ids
  */
 export const download = ids => current()
+  .then(checkVideosPath)
   .then(config => get(ids)
     .then(infos => {
       return map(infos, (info) => {
