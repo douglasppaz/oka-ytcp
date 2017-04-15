@@ -5,7 +5,12 @@ import expressWs from 'express-ws';
 import packageInfo from '../../package.json';
 import { SERVER_PORT } from '../../constants.json';
 
-import { JsonResponse, getErrorLabel, wsMessageObject } from './utils';
+import {
+  JsonResponse,
+  getErrorLabel,
+  wsMessageObject,
+  wsBroadcast,
+} from './utils';
 import { loadConfig } from './config';
 import { download } from './getVideo';
 import { listVideos, watchIn } from './manager';
@@ -58,5 +63,12 @@ loadConfig()
   .then(() => addConfigObserver(
     'videosPath',
     (videosPath) => watchIn(videosPath, wsApp)))
+  .then(() => addConfigObserver(
+    'videosPath',
+    () => listVideos()
+      .then(videos => wsBroadcast(
+        wsMessageObject(
+          updateAllVideos,
+          { videos }), wsApp))))
   .then(runServer)
   .catch(console.error);
