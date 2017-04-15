@@ -1,7 +1,14 @@
 import fs from 'fs-extra';
+import watch from 'watch';
+
 import { current } from './config';
 import { isOkaFilename } from './utils';
 
+let monitorStop;
+
+/**
+ * Lista todos os vídeos
+ */
 export const listVideos = () => current()
   .then((config) => new Promise((resolve, reject) => {
     fs.readdir(config.videosPath, (err, files) => {
@@ -14,3 +21,21 @@ export const listVideos = () => current()
         }));
     });
   }));
+
+/**
+ * Assite arquivos .oka na pasta de vídeos
+ * @param videosPath
+ * @param wsApp
+ */
+export const watchIn = (videosPath, wsApp) => {
+  if (monitorStop) monitorStop();
+  watch.createMonitor(videosPath, {
+    filter: isOkaFilename,
+  }, (monitor) => {
+    monitor.on('created', console.log);
+    monitor.on('changed', console.log);
+    monitor.on('removed', console.log);
+
+    monitorStop = monitor.stop;
+  });
+};

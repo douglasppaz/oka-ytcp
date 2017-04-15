@@ -8,8 +8,7 @@ import { SERVER_PORT } from '../../constants.json';
 import { JsonResponse, getErrorLabel, wsMessageObject } from './utils';
 import { loadConfig } from './config';
 import { download } from './getVideo';
-import { listVideos } from './manager';
-import { watchIn } from './watchOkaFiles';
+import { listVideos, watchIn } from './manager';
 import { addConfigObserver } from './configObserver';
 
 import constants from '../../constants.json';
@@ -21,7 +20,7 @@ const { REDUX_ACTIONS_TYPES: { updateAllVideos } } = constants;
  * Configurações do servidor HTTP
  */
 const app = express();
-const wsApp = expressWs(app);
+const wsApp = expressWs(app).getWss();
 
 app.get('/', (req, res) => {
   JsonResponse(res, {
