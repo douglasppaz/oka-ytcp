@@ -2,7 +2,10 @@ import fs from 'fs-extra';
 import watch from 'watch';
 
 import { current } from './config';
-import { isOkaFilename } from './utils';
+import { isOkaFilename, wsBroadcast, wsMessageObject } from './utils';
+
+import constants from '../../constants.json';
+const { REDUX_ACTIONS_TYPES: { addVideo, changeVideo } } = constants;
 
 let monitorStop;
 
@@ -32,8 +35,14 @@ export const watchIn = (videosPath, wsApp) => {
   watch.createMonitor(videosPath, {
     filter: isOkaFilename,
   }, (monitor) => {
-    monitor.on('created', console.log);
-    monitor.on('changed', console.log);
+    monitor.on('created', (filepath) => {
+      const info = fs.readJsonSync(filepath);
+      wsBroadcast(wsMessageObject(addVideo, { info }), wsApp);
+    });
+    monitor.on('changed', (filepath) => {
+      const info = fs.readJsonSync(filepath);
+      wsBroadcast(wsMessageObject(changeVideo, { info }), wsApp);
+    });
     monitor.on('removed', console.log);
 
     monitorStop = monitor.stop;

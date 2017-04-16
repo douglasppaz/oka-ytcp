@@ -1,16 +1,29 @@
-const initialState = null;
+import findIndex from 'lodash-es/findIndex';
 
 import constants from '../../../../constants.json';
+const { REDUX_ACTIONS_TYPES: {
+  updateAllVideos,
+  addVideo,
+  changeVideo,
+} } = constants;
 
-const { REDUX_ACTIONS_TYPES: { updateAllVideos } } = constants;
+const initialState = [];
 
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case updateAllVideos:
-      return action.payload.videos;
-    default:
-      return state;
+  case updateAllVideos: {
+    return action.payload.videos;
   }
-  return state;
-}
+  case addVideo: {
+    return state.concat(action.payload.info);
+  }
+  case changeVideo: {
+    const { info } = action.payload;
+    state[findIndex(state, i => i.id === info.id)] = info;
+    return state;
+  }
+  default:
+    return state;
+  }
+};
