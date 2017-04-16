@@ -1,5 +1,6 @@
 import findIndex from 'lodash-es/findIndex';
 
+
 import constants from '../../../../constants.json';
 const { REDUX_ACTIONS_TYPES: {
   updateAllVideos,
@@ -16,7 +17,8 @@ export default (state = initialState, action) => {
     return action.payload.videos;
   }
   case addVideo: {
-    return state.concat(action.payload.info);
+    state.push(action.payload.info);
+    return state;
   }
   case changeVideo: {
     const { info } = action.payload;
