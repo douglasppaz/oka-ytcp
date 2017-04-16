@@ -17,7 +17,7 @@ import CloudDone from 'material-ui/svg-icons/file/cloud-done';
 import { SERVER_PORT } from '../../../../constants.json';
 import { name, version } from '../../../../package.json';
 
-const selectServerQueue = new Queue(50, Infinity);
+const selectServerQueue = new Queue(5, Infinity);
 
 
 class SelectServer extends React.Component {
@@ -44,7 +44,10 @@ class SelectServer extends React.Component {
   }
 
   getChildContext() {
-    return { server: this.state.server };
+    return {
+      server: this.state.server,
+      selectServer: () => this.setState({ selected: false, server: null }),
+    };
   }
 
   updateAddrStatus(addr, newStatus) {
@@ -121,7 +124,10 @@ class SelectServer extends React.Component {
   }
 }
 
-SelectServer.childContextTypes = { server: PropTypes.string };
+SelectServer.childContextTypes = {
+  server: PropTypes.string,
+  selectServer: PropTypes.func,
+};
 SelectServer.propTypes = { children: PropTypes.node };
 
 export default SelectServer;

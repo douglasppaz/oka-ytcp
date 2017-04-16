@@ -1,6 +1,8 @@
 import React from 'react';
 import AppBar from 'material-ui/AppBar/AppBar';
 import Drawer from 'material-ui/Drawer/Drawer';
+import MenuItem from 'material-ui/MenuItem/MenuItem';
+import Divider from 'material-ui/Divider/Divider';
 import { TITLE } from '../../../../constants.json';
 
 
@@ -15,7 +17,8 @@ class TopBar extends React.Component {
   }
 
   render() {
-    const {drawerOpen} = this.state;
+    const { drawerOpen } = this.state;
+    const { selectServer } = this.context;
 
     return (
       <div>
@@ -27,10 +30,15 @@ class TopBar extends React.Component {
           open={drawerOpen}
           docked={false}
           onRequestChange={() => this.toggleDrawer()}
-        ></Drawer>
+        >
+          <Divider />
+          <MenuItem onTouchTap={selectServer}>Alterar Servidor</MenuItem>
+        </Drawer>
       </div>
     );
   }
 }
+
+TopBar.contextTypes = { selectServer: React.PropTypes.func };
 
 export default TopBar;
