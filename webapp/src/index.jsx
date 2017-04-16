@@ -22,6 +22,8 @@ import './style/main.scss';
 window.dispatch = store.dispatch;
 injectTapEventPlugin();
 
+console.log(process.env);
+
 ReactDOM.render(
   (
     <Provider store={store}>

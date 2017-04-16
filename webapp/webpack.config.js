@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const distDevPath = 'dist-dev';
@@ -33,6 +34,7 @@ module.exports = env => {
       ]
     },
     plugins: [
+      new webpack.EnvironmentPlugin(['NODE_ENV']),
       new HtmlWebpackPlugin({
         template: './src/index.pug',
         filetype: 'pug'
