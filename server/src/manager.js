@@ -5,7 +5,7 @@ import { current } from './config';
 import { isOkaFilename, wsBroadcast, wsMessageObject } from './utils';
 
 import constants from '../../constants.json';
-const { REDUX_ACTIONS_TYPES: { addVideo, changeVideo } } = constants;
+const { REDUX_ACTIONS_TYPES: { addVideo, changeVideo, updateAllVideos } } = constants;
 
 let monitorStop;
 
@@ -43,7 +43,12 @@ export const watchIn = (videosPath, wsApp) => {
       const info = fs.readJsonSync(filepath);
       wsBroadcast(wsMessageObject(changeVideo, { info }), wsApp);
     });
-    monitor.on('removed', console.log);
+    monitor.on('removed', () => {
+      listVideos()
+        .then(videos => wsBroadcast(wsMessageObject(
+          updateAllVideos,
+          { videos }), wsApp));
+    });
 
     monitorStop = monitor.stop;
   });
