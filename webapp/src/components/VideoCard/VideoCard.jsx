@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from 'material-ui/Card/Card';
 import VideoTumbnail from './VideoTumbnail';
+import { ytDurationParse } from '../../utils/time';
 import classes from './VideoCard.scss';
 
 
@@ -18,7 +19,7 @@ class VideoCard extends React.Component {
           </div>
           <div className="info">
             <div>{title}</div>
-            <div className="footer">Duração: {duration} / {verbose_percent}</div>
+            <div className="footer">Duração: {ytDurationParse(duration)} / {verbose_percent}</div>
           </div>
         </div>
       </Card>
