@@ -1,0 +1,11 @@
+:local(.layout) {
+  padding-top: 64px;
+
+  .topbar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 5;
+  }
+}

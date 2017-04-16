@@ -1,13 +1,15 @@
 import React from 'react';
 import Card from 'material-ui/Card/Card';
 import VideoTumbnail from './VideoTumbnail';
-import { secondsToStr } from '../../utils/time';
 import classes from './VideoCard.scss';
 
 
 class VideoCard extends React.Component {
   render() {
-    const { title, thumbnails, duration } = this.props.video;
+    const { title, thumbnails, duration, percent } = this.props.video;
+    const verbose_percent = percent === 100 ?
+      <span>Baixado</span> :
+      <span>Baixando <span>{~~(percent)}%</span></span>;
     return (
       <Card className="container">
         <div className={classes.container}>
@@ -16,7 +18,7 @@ class VideoCard extends React.Component {
           </div>
           <div className="info">
             <div>{title}</div>
-            <div className="footer">Duração: {secondsToStr(duration)}</div>
+            <div className="footer">Duração: {duration} / {verbose_percent}</div>
           </div>
         </div>
       </Card>

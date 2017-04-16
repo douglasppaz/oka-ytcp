@@ -63,7 +63,6 @@ const dotOka = (id, dotOkaPath) => new Promise((resolve, reject) => {
       };
 
       fs.writeJsonSync(dotOkaPath, info);
-
       resolve(info);
     }
   );
