@@ -17,7 +17,7 @@ import CloudDone from 'material-ui/svg-icons/file/cloud-done';
 import { SERVER_PORT } from '../../../../constants.json';
 import { name, version } from '../../../../package.json';
 
-const selectServerQueue = new Queue(125, Infinity);
+const selectServerQueue = new Queue(50, Infinity);
 
 
 class SelectServer extends React.Component {
