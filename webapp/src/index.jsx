@@ -16,6 +16,7 @@ import NoMatch from './routes/NoMatch';
 
 import store from './redux/store';
 
+import './utils/prototypes';
 import './style/main.scss';
 
 window.dispatch = store.dispatch;

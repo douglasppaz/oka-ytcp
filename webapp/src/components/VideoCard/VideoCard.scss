@@ -1,0 +1,34 @@
+:local(.container) {
+  display: block;
+
+  @media all and (orientation: landscape) {
+    display: flex;
+  }
+
+  .tumbnail {
+    @media all and (orientation: landscape) {
+      flex-grow: 0;
+      padding: 8px;
+    }
+  }
+  .info {
+    position: relative;
+    padding: 8px 8px 32px 8px;
+    box-sizing: border-box;
+
+    @media all and (orientation: landscape) {
+      flex-grow: 1;
+      align-items: stretch;
+    }
+
+    .footer {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      height: 16px;
+      line-height: 16px;
+      color: #7f8c8d;
+      font-size: 14px;
+    }
+  }
+}
