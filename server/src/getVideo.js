@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { map, isArray, isString, template } from 'lodash';
+import { map, isArray, isString, template, defaults } from 'lodash';
 import youtubedl from 'youtube-dl';
 import Queue from 'promise-queue';
 
@@ -7,6 +7,8 @@ import { current, checkVideosPath } from './config';
 
 const ytURLTemplate = template('http://www.youtube.com/watch?v=<%= id %>');
 const downloadVideoQueue = new Queue(1, Infinity);
+const updateOkaFileQueue = new Queue(1, Infinity);
+const downloading = {};
 
 
 /**
@@ -46,6 +48,7 @@ const dotOka = (id, dotOkaPath) => new Promise((resolve, reject) => {
 
       const info = {
         id,
+        dotOkaPath,
         extractor,
         filename: _filename,
         title: fulltitle,
@@ -65,6 +68,18 @@ const dotOka = (id, dotOkaPath) => new Promise((resolve, reject) => {
     }
   );
 });
+
+/**
+ * Atualiza infos do .oka
+ * @param dotOkaPath
+ * @param info
+ */
+const updateDotOka = (dotOkaPath, info) => updateOkaFileQueue.add(() => new Promise((resolve) => {
+  const currentInfo = fs.readJsonSync(dotOkaPath);
+  const newInfo = defaults(info, currentInfo);
+  fs.writeJsonSync(dotOkaPath, newInfo);
+  resolve(newInfo);
+}));
 
 /**
  * Adiciona a lista de downloads os vídeos dos IDs recebido no parametro
@@ -91,11 +106,17 @@ export const download = ids => current()
     .then(infos => {
       return map(infos, (info) => {
         const downloadPromise = downloadVideoQueue.add(() => new Promise((resolve, reject) => {
+          const { id, filename, dotOkaPath } = info;
+
+          if (downloading[id]) return reject();
+          downloading[id] = true;
+
           const { videosPath } = config;
-          const { id, filename } = info;
           const filePath = `${videosPath}/${filename}`;
 
           let downloaded = fs.existsSync(filePath) ? fs.statSync(filePath).size : 0;
+          let pos = downloaded;
+          let size = 0;
 
           const v = youtubedl(
             ytURLTemplate({ id }),
@@ -108,8 +129,21 @@ export const download = ids => current()
 
           v.pipe(fs.createWriteStream(filePath, { flags: 'a' }));
 
+          v.on('info', (info) => {
+            size = info.size;
+          });
+          v.on('data', (chunk) => {
+            pos += chunk.length;
+            if (size) {
+              const percent = pos / size * 100;
+              updateDotOka(dotOkaPath, { percent });
+            }
+          });
           v.on('end', resolve);
-          v.on('error', reject);
+          v.on('error', () => {
+            downloading[id] = false;
+            reject();
+          });
         }));
         return { info, downloadPromise };
       });
