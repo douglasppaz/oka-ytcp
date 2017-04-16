@@ -1,0 +1,5 @@
+[data-row] { display: flex; }
+
+@for $i from 0 through 10 {
+  [data-col-#{$i}] { flex-grow: $i };
+}

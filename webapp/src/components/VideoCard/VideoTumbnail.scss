@@ -1,0 +1,18 @@
+:local(.imgContainer) {
+  $height: 90px;
+  display: block;
+  width: 160px;
+  height: $height;
+  line-height: $height;
+  margin: 16px;
+  background-color: #95a5a6;
+  background-size: cover;
+  background-position: center;
+
+  img {
+    display: block;
+    margin: auto;
+    max-width: 100%;
+    max-height: 100%;
+  }
+}
