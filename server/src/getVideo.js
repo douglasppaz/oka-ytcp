@@ -135,8 +135,8 @@ export const download = ids => current()
             pos += chunk.length;
             if (size) {
               const newPercent = pos / size * 100;
-              if (percent - 5 > newPercent)
-                updateDotOka(dotOkaPath, { newPercent });
+              if (percent - 5 > newPercent || newPercent === 100)
+                updateDotOka(dotOkaPath, { percent: newPercent });
             }
           });
           v.on('end', resolve);
