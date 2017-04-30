@@ -34,13 +34,15 @@ class SelectServer extends React.Component {
   componentDidMount() {
     this.addPosibleAddrs('127.0.1');
     if (this.state.server) this.addPosibleAddrs(this.state.server);
-    getLocalAddrs((newAddr) => {
-      this.addPosibleAddrs(newAddr);
-      const newAddrSplit = newAddr.split('.');
-      newAddrSplit.pop();
-      range(1, 256)
-        .forEach((i) => this.addPosibleAddrs(newAddrSplit.concat(i).join('.')));
-    });
+    if (process.env.NODE_ENV !== 'development') {
+      getLocalAddrs((newAddr) => {
+        this.addPosibleAddrs(newAddr);
+        const newAddrSplit = newAddr.split('.');
+        newAddrSplit.pop();
+        range(1, 256)
+          .forEach((i) => this.addPosibleAddrs(newAddrSplit.concat(i).join('.')));
+      });
+    }
   }
 
   getChildContext() {
