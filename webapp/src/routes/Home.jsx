@@ -2,19 +2,31 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Layout from '../components/Layout';
 import VideoCard from '../components/VideoCard';
-import Search from '../components/Search';
+import SearchField from '../components/SearchField';
+import YTSearch from '../components/YTSearch';
 
 
 class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { query: '' };
+  }
+
+  changeQuery(query) {
+    this.setState({ query });
+  }
+
   render() {
     const { videos } = this.props;
     const videosCard = videos.map((video) => <VideoCard key={video.id} video={video} />);
+
     return (
       <Layout>
-        <Search
-          onChange={console.log}
+        <SearchField
+          onChange={q => this.changeQuery(q)}
         />
         {videosCard}
+        <YTSearch />
       </Layout>
     );
   }
