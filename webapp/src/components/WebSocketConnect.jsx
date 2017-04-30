@@ -29,6 +29,7 @@ class WebSocketConnect extends React.Component {
       const action = JSON.parse(data);
       dispatch(action);
     };
+    // eslint-disable-next-line no-console
     this.ws.onerror = console.error;
   }
 

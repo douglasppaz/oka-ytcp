@@ -36,5 +36,6 @@ module.exports = {
   },
   globals: {
     'dispatch': true,
+    'process': true
   }
 };

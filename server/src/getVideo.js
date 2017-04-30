@@ -105,7 +105,7 @@ export const download = ids => current()
     .then(infos => {
       return map(infos, (info) => {
         const downloadPromise = downloadVideoQueue.add(() => new Promise((resolve, reject) => {
-          const { id, filename, dotOkaPath } = info;
+          const { id, filename, percent, dotOkaPath } = info;
 
           if (downloading[id]) return reject();
           downloading[id] = true;
@@ -134,8 +134,9 @@ export const download = ids => current()
           v.on('data', (chunk) => {
             pos += chunk.length;
             if (size) {
-              const percent = pos / size * 100;
-              updateDotOka(dotOkaPath, { percent });
+              const newPercent = pos / size * 100;
+              if (percent - 5 > newPercent)
+                updateDotOka(dotOkaPath, { newPercent });
             }
           });
           v.on('end', resolve);

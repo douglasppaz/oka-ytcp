@@ -1,6 +1,6 @@
 {
   "name": "oka-ytcp",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "OKa Youtube Cached Player",
   "main": "index.js",
   "scripts": {
