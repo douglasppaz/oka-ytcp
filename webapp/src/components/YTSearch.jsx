@@ -1,14 +1,21 @@
 import React from 'react';
-import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import request from 'request-promise';
+
+import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
+import RaisedButton from 'material-ui/RaisedButton/RaisedButton';
 
 import VideoCard from './VideoCard';
 
+const initialState = {
+  loading: false,
+  results: [],
+  nextPageToken: null,
+};
 
 class YTSearch extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { loading: false, results: [] };
+    this.state = initialState;
   }
 
   componentDidMount() { this.search(this.props.query); }
@@ -19,13 +26,18 @@ class YTSearch extends React.Component {
   }
 
   search(query) {
+    this.setState(initialState);
     if (!query) return false;
-    const searchURL = `https://www.googleapis.com/youtube/v3/search?key=${process.env.YT_API_KEY}&part=snippet&q=${query}&type=video`;
+    this.searchMore(query);
+  }
+
+  searchMore(query) {
+    const { nextPageToken } = this.state;
+    const searchURL = `https://www.googleapis.com/youtube/v3/search?key=${process.env.YT_API_KEY}&part=snippet&q=${query}&type=video${nextPageToken ? `&pageToken=${nextPageToken}` : ''}`;
     this.setState({ loading: true });
     request.get(searchURL)
       .then(JSON.parse)
       .then((data) => {
-        console.log(data);
         const { items } = data;
         const results = items.map(item => ({
           id: item.id.videoId,
@@ -37,7 +49,11 @@ class YTSearch extends React.Component {
           }],
           full: item
         }));
-        this.setState({ results, loading: false });
+        this.setState(state => ({
+          results: state.results.concat(results),
+          loading: false,
+          nextPageToken: data.nextPageToken
+        }));
       });
   }
 
@@ -46,13 +62,20 @@ class YTSearch extends React.Component {
 
     if (!query) return null;
 
-    const { loading, results } = this.state;
+    const { loading, results, nextPageToken } = this.state;
 
     return (
       <div>
         <div className="container"><h4>Resultados encontrados em youtube.com para {query}</h4></div>
-        {!loading && results.map((video) => <VideoCard key={video.id} video={video} />)}
+        {results.map((video) => <VideoCard key={video.id} video={video} />)}
         {loading && <div className="container"><CircularProgress /></div>}
+        {!loading && nextPageToken && <div className="container">
+          <RaisedButton
+            primary
+            label="Carregar +"
+            onTouchTap={() => this.searchMore(query)}
+          />
+        </div>}
       </div>
     );
   }
