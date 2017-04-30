@@ -2,7 +2,7 @@
 Aplicação web do OKa YTCP utlizada como interface do usuário.
 
 ### .env
-O arquivo .env deve ter as sequintes configurações:
+O arquivo ```.env``` deve ter as sequintes configurações:
 
 ```
 YT_API_KEY=[SUA API KEY GERADA NO CONSOLE DE DESENVOLVEDORES DO GOOGLE]
