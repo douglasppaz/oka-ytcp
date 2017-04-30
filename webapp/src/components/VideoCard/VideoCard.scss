@@ -11,7 +11,7 @@
       padding: 8px;
     }
   }
-  .info {
+  .infos {
     position: relative;
     padding: 8px 8px 32px 8px;
     box-sizing: border-box;
@@ -29,6 +29,17 @@
       line-height: 16px;
       color: #7f8c8d;
       font-size: 14px;
+
+      .info {
+        &:after {
+          display: inline-block;
+          content: "/";
+          margin: 0 8px;
+        }
+        &:last-child:after {
+          display: none;
+        }
+      }
     }
   }
 }

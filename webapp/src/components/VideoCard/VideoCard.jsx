@@ -17,11 +17,11 @@ class VideoCard extends React.Component {
           <div className="tumbnail">
             <VideoTumbnail thumbnails={thumbnails} />
           </div>
-          <div className="info">
+          <div className="infos">
             <div>{title}</div>
             <div className="footer">
-              {duration && <span>Duração: {ytDurationParse(duration)} / </span>}
-              {percent && <span>{verbose_percent}</span>}
+              {duration && <span className="info">Duração: {ytDurationParse(duration)}s</span>}
+              {percent && <span className="info">{verbose_percent}</span>}
             </div>
           </div>
         </div>
