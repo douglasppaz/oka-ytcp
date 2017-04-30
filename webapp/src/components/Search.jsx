@@ -13,7 +13,28 @@ const style = {
 };
 
 class YTSearch extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { icon: 'search' };
+    this.timeout = null;
+  }
+
+  onChange(value) {
+    const { onChange } = this.props;
+    if (this.timeout) {
+      clearTimeout(this.timeout);
+      this.timeout = null;
+    }
+    this.setState({ icon: 'keyboard' });
+    this.timeout = setTimeout(() => {
+      onChange(value);
+      this.setState({ icon: 'search' });
+    }, 750);
+  }
+
   render () {
+    const { icon } = this.state;
+
     return (
       <div className="container">
         <Paper
@@ -26,15 +47,18 @@ class YTSearch extends React.Component {
           <FontIcon
             className="material-icons"
             style={style.searchIcon}
-          >search</FontIcon>
+          >{icon}</FontIcon>
           <TextField
             hintText="Buscar por vídeo"
             fullWidth={true}
+            onChange={(e, newValue) => this.onChange(newValue)}
           />
         </Paper>
       </div>
     );
   }
 }
+
+YTSearch.propTypes = { onChange: React.PropTypes.func };
 
 export default YTSearch;

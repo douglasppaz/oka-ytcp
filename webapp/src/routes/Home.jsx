@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Layout from '../components/Layout';
 import VideoCard from '../components/VideoCard';
-import YTSearch from '../components/YTSearch';
+import Search from '../components/Search';
 
 
 class Home extends React.Component {
@@ -11,7 +11,9 @@ class Home extends React.Component {
     const videosCard = videos.map((video) => <VideoCard key={video.id} video={video} />);
     return (
       <Layout>
-        <YTSearch />
+        <Search
+          onChange={console.log}
+        />
         {videosCard}
       </Layout>
     );
