@@ -19,7 +19,10 @@ class VideoCard extends React.Component {
           </div>
           <div className="info">
             <div>{title}</div>
-            <div className="footer">Duração: {ytDurationParse(duration)} / {verbose_percent}</div>
+            <div className="footer">
+              {duration && <span>Duração: {ytDurationParse(duration)} / </span>}
+              {percent && <span>{verbose_percent}</span>}
+            </div>
           </div>
         </div>
       </Card>

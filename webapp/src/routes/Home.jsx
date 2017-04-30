@@ -9,7 +9,7 @@ import YTSearch from '../components/YTSearch';
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { query: '' };
+    this.state = { query: 'lady gaga' };
   }
 
   changeQuery(query) {
@@ -18,15 +18,14 @@ class Home extends React.Component {
 
   render() {
     const { videos } = this.props;
+    const { query } = this.state;
     const videosCard = videos.map((video) => <VideoCard key={video.id} video={video} />);
 
     return (
       <Layout>
-        <SearchField
-          onChange={q => this.changeQuery(q)}
-        />
+        <SearchField onChange={q => this.changeQuery(q)} />
         {videosCard}
-        <YTSearch />
+        <YTSearch query={query} />
       </Layout>
     );
   }
