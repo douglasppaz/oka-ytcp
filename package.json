@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/douglasppaz/oka-ytcp#readme",
   "dependencies": {
-    "concurrently": "^3.4.0",
-    "react-material-layout": "^1.1.2"
+    "concurrently": "^3.4.0"
   }
 }
