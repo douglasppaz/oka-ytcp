@@ -7,9 +7,12 @@ import {
   Switch,
   Route,
 } from 'react-router-dom';
-import injectTapEventPlugin from 'react-tap-event-plugin';
 import SelectServer from './components/SelectServer';
 import WebSocketConnect from './components/WebSocketConnect';
+
+import injectTapEventPlugin from 'react-tap-event-plugin';
+
+import 'react-material-layout/dist/react-material-layout.min.css';
 
 import Home from './routes/Home';
 import NoMatch from './routes/NoMatch';
