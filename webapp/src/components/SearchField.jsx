@@ -12,7 +12,7 @@ const style = {
   }
 };
 
-class YTSearch extends React.Component {
+class SearchField extends React.Component {
   constructor(props) {
     super(props);
     this.state = { icon: 'search' };
@@ -59,6 +59,6 @@ class YTSearch extends React.Component {
   }
 }
 
-YTSearch.propTypes = { onChange: React.PropTypes.func };
+SearchField.propTypes = { onChange: React.PropTypes.func };
 
-export default YTSearch;
+export default SearchField;
