@@ -4,6 +4,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const distDevPath = 'dist-dev';
 
+require('dotenv').config();
+
 module.exports = env => {
   const { dev } = env || {};
 
@@ -41,7 +43,7 @@ module.exports = env => {
       ]
     },
     plugins: [
-      new webpack.EnvironmentPlugin(['NODE_ENV']),
+      new webpack.EnvironmentPlugin(['NODE_ENV', 'YT_API_KEY']),
       new HtmlWebpackPlugin({
         template: './src/index.pug',
         filetype: 'pug'

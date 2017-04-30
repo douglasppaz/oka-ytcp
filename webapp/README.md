@@ -1,6 +1,15 @@
 # OKa Youtube Cached Player - Web App
 Aplicação web do OKa YTCP utlizada como interface do usuário.
 
+### .env
+O arquivo .env deve ter as sequintes configurações:
+
+'''
+YT_API_KEY=[SUA API KEY GERADA NO CONSOLE DE DESENVOLVEDORES DO GOOGLE]
+'''
+
+A chave '''YT_API_KEY''' deve ser gerada no [console de desenvolvedores do Google](https://console.developers.google.com/) com o YouTube Data API v3 habilitado no projeto.
+
 ### Comandos npm
 Você pode executar os comandos abaixo usando a linha de comando ```npm run [comando]```
 
