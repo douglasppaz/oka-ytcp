@@ -43,3 +43,9 @@
     }
   }
 }
+
+:local(.actions) {
+  padding: 0 0 0 8px;
+
+  div { cursor: pointer; }
+}
