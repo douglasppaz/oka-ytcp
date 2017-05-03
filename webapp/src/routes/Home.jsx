@@ -9,7 +9,7 @@ import YTSearch from '../components/YTSearch';
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { query: 'lady gaga' };
+    this.state = { query: '' };
   }
 
   changeQuery(query) {
