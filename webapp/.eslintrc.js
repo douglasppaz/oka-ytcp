@@ -36,6 +36,7 @@ module.exports = {
   },
   globals: {
     'dispatch': true,
-    'process': true
+    'process': true,
+    'Logger': true
   }
 };

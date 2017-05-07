@@ -22,7 +22,10 @@ import store from './redux/store';
 import './utils/prototypes';
 import './style/main.scss';
 
+window.Logger = console;
 window.dispatch = store.dispatch;
+
+Logger.log('running in', process.env.NODE_ENV);
 injectTapEventPlugin();
 
 ReactDOM.render(
