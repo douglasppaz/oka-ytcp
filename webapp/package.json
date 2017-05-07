@@ -4,8 +4,8 @@
   "description": "OKa Youtube Cached Player - Web App",
   "main": "index.js",
   "scripts": {
-    "dist": "NODE_ENV='production' && npm run test && webpack",
-    "start": "NODE_ENV='development' && webpack --watch --env.dev",
+    "dist": "cross-env NODE_ENV=production npm run test && webpack",
+    "start": "cross-env NODE_ENV=development webpack --watch --env.dev",
     "test": "eslint src/**.js src/**.jsx"
   },
   "author": "Douglas Paz",
@@ -17,6 +17,7 @@
     "babel-preset-react": "^6.23.0",
     "browser-sync": "^2.18.8",
     "browser-sync-webpack-plugin": "^1.1.4",
+    "cross-env": "^4.0.0",
     "css-loader": "^0.28.0",
     "dotenv": "^4.0.0",
     "eslint": "^3.17.1",
