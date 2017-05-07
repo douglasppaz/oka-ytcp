@@ -11,7 +11,7 @@ Em breve!
 Crie o seu fork, faça suas alterações e se achar conveniente, mande um Pull Request para esse projeto!
 
 Algumas dicas:
-- Leia o README.md de cada projeto (webapp, server, desktop)
+- Leia o README.md de cada projeto (webapp, server, desktopapp)
 - Dê um ```npm i``` na raiz do projeto antes de tudo!
 - Deixe sugestões nas [issues](https://github.com/douglasppaz/oka-ytcp/issues), participe das discussões.
 - Entre em contato para dúvidas mais crueis por e-mail *eu@douglaspaz.com*
