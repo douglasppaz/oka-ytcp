@@ -11,18 +11,16 @@
   "author": "Douglas Paz",
   "license": "MIT",
   "dependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
     "express": "^4.15.2",
     "express-ws": "^3.0.0",
     "fs-extra": "^2.0.0",
     "lodash": "^4.17.4",
+    "mocha": "^3.3.0",
+    "nodemon": "^1.11.0",
     "promise-queue": "^2.2.3",
     "watch": "^1.0.2",
     "youtube-dl": "^1.11.1"
-  },
-  "devDependencies": {
-    "babel-cli": "^6.23.0",
-    "babel-preset-env": "^1.2.1",
-    "mocha": "^3.2.0",
-    "nodemon": "^1.11.0"
   }
 }
