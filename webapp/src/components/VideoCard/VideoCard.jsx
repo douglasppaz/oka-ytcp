@@ -8,7 +8,8 @@ import classes from './VideoCard.scss';
 
 class VideoCard extends React.Component {
   render() {
-    const { title, thumbnails, duration, percent, actions } = this.props.video;
+    const { actions, video } = this.props;
+    const { title, thumbnails, duration, percent } = video;
     const verbose_percent = percent === 100 ?
       <span>Baixado</span> :
       <span>Baixando <span>{~~(percent)}%</span></span>;
@@ -29,14 +30,14 @@ class VideoCard extends React.Component {
           </div>
         </Card>
         {actions && <div className={classes.actions} data-layout="column">
-          {actions.map(action => (
-            <div><FontIcon
+          {actions.map(({ fn, icon }, i) => (
+            <div key={i}><FontIcon
               className="material-icons"
               fontSize={36}
               color="#34495e"
               hoverColor="#3498db"
-              onTouchTap={action.fn}
-            >{action.icon}</FontIcon></div>
+              onTouchTap={fn}
+            >{icon}</FontIcon></div>
           ))}
         </div>}
       </div>

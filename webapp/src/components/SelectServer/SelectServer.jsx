@@ -14,7 +14,8 @@ import ListItem from 'material-ui/List/ListItem';
 import Subheader from 'material-ui/Subheader/Subheader';
 import CloudDone from 'material-ui/svg-icons/file/cloud-done';
 
-import { SERVER_PORT } from '../../../../constants.json';
+import { apiRequestUrl } from '../../core/Api'
+
 import { name, version } from '../../../../package.json';
 
 const selectServerQueue = new Queue(5, Infinity);
@@ -74,12 +75,12 @@ class SelectServer extends React.Component {
 
     selectServerQueue.add(() => new Promise((resolve) => {
       this.updateAddrStatus(newAddr, -1);
-      request.get(`http://${newAddr}:${SERVER_PORT}`, { timeout: 1000 })
+      request.get(apiRequestUrl(newAddr), { timeout: 1000 })
         .then((response) => {
           const data = JSON.parse(response);
           this.updateAddrStatus(
             newAddr,
-            data.name === name && data.version === version ? 1 : 2,
+            data.name === name && data.version === version ? 1 : 2
           );
         })
         .catch((e) => this.updateAddrStatus(newAddr, 0))

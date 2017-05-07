@@ -19,7 +19,22 @@ class Home extends React.Component {
   render() {
     const { videos } = this.props;
     const { query } = this.state;
-    const videosCard = videos.map((video) => <VideoCard key={video.id} video={video} />);
+    const videosCard = videos.map((video) => (
+      <VideoCard
+        key={video.id}
+        video={video}
+        actions={[
+          {
+            fn: () => {},
+            icon: 'play_arrow'
+          },
+          {
+            fn: () => {},
+            icon: 'delete'
+          }
+        ]}
+      />
+    ));
 
     return (
       <Layout>

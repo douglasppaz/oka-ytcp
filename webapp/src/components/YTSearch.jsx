@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import request from 'request-promise';
 
 import CircularProgress from 'material-ui/CircularProgress/CircularProgress';
 import RaisedButton from 'material-ui/RaisedButton/RaisedButton';
 
 import VideoCard from './VideoCard';
+
+import { downloadVideo } from '../core/Api';
 
 const initialState = {
   loading: false,
@@ -57,6 +59,11 @@ class YTSearch extends React.Component {
       });
   }
 
+  doDownload(id) {
+    const { server } = this.context;
+    downloadVideo(server, id);
+  }
+
   render() {
     const { query } = this.props;
 
@@ -66,8 +73,23 @@ class YTSearch extends React.Component {
 
     return (
       <div>
-        <div className="container"><h4>Resultados encontrados em youtube.com para {query}</h4></div>
-        {results.map((video) => <VideoCard key={video.id} video={video} />)}
+        <div className="container"><h4>Resultados encontrados em youtube.com para "{query}"</h4></div>
+        {results.map((video) => (
+          <VideoCard
+            key={video.id}
+            video={video}
+            actions={[
+              {
+                fn: () => {},
+                icon: 'play_arrow'
+              },
+              {
+                fn: () => this.doDownload(video.id),
+                icon: 'file_download'
+              }
+            ]}
+          />
+        ))}
         {loading && <div className="container"><CircularProgress /></div>}
         {!loading && nextPageToken && <div className="container">
           <RaisedButton
@@ -81,6 +103,7 @@ class YTSearch extends React.Component {
   }
 }
 
-YTSearch.propTypes = { query: React.PropTypes.string };
+YTSearch.propTypes = { query: PropTypes.string };
+YTSearch.contextTypes = { server: PropTypes.any };
 
 export default YTSearch;
