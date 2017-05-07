@@ -10,11 +10,11 @@ YT_API_KEY=[SUA API KEY GERADA NO CONSOLE DE DESENVOLVEDORES DO GOOGLE]
 
 A chave ```YT_API_KEY``` deve ser gerada no [console de desenvolvedores do Google](https://console.developers.google.com/) com o YouTube Data API v3 habilitado no projeto.
 
-### Comandos npm
-Você pode executar os comandos abaixo usando a linha de comando ```npm run [comando]```
+### Tarefas npm
+Você pode executar as tarefas abaixo usando a linha de comando com ```npm run [comando]```
 
-|Comando|Descrição|
-|-------|---------|
+|Tarefa|Descrição|
+|------|---------|
 |dist|Gera os arquivos de produção na pasta dist/
 |start|Inicia um servidor web com Browersync para desenvolvimento
 |test|Realiza testes com eslint
