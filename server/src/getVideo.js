@@ -63,6 +63,7 @@ const dotOka = (id, dotOkaPath) => new Promise((resolve, reject) => {
       };
 
       fs.writeJsonSync(dotOkaPath, info);
+      console.log('create dotOka', dotOkaPath);
       resolve(info);
     }
   );
@@ -106,6 +107,7 @@ export const download = ids => current()
       return map(infos, (info) => {
         const downloadPromise = downloadVideoQueue.add(() => new Promise((resolve, reject) => {
           const { id, filename, percent, dotOkaPath } = info;
+          let lastPercent;
 
           if (downloading[id]) return reject();
           downloading[id] = true;
@@ -135,8 +137,11 @@ export const download = ids => current()
             pos += chunk.length;
             if (size) {
               const newPercent = pos / size * 100;
-              if (percent - 5 > newPercent || newPercent === 100)
+              if (!lastPercent || lastPercent < newPercent - 5 || newPercent === 100) {
+                lastPercent = newPercent;
+                console.log('download', info.id, 'newPercent', newPercent);
                 updateDotOka(dotOkaPath, { percent: newPercent });
+              }
             }
           });
           v.on('end', resolve);
