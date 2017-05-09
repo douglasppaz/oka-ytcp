@@ -36,9 +36,9 @@ class VideoCard extends React.Component {
             {actions.map(({ fn, icon }, i) => (
               <div key={i}><FontIcon
                 className="material-icons"
-                fontSize={36}
                 color="#34495e"
                 hoverColor="#3498db"
+                style={{ fontSize: 32 }}
                 onTouchTap={fn}
               >{icon}</FontIcon></div>
             ))}
