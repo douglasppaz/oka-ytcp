@@ -46,9 +46,9 @@ app.get('/', (req, res) => {
 app.get('/v/', (req, res) => {
   download(keys(req.query))
     .then(list => JsonResponse(res, { infos: map(list, (item) => item.info) }))
-    .catch(code => JsonResponse(res, {
-      code,
-      label: getErrorLabel(code)
+    .catch(error => JsonResponse(res, {
+      error,
+      errorLabel: getErrorLabel(error.code),
     }));
 });
 

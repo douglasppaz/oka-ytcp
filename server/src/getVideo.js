@@ -34,7 +34,7 @@ const dotOka = (id, dotOkaPath) => new Promise((resolve, reject) => {
   youtubedl.getInfo(
     ytURL,
     (error, bruteInfo) => {
-      if (error) return reject(error.code);
+      if (error) return reject(error);
 
       const {
         id,
