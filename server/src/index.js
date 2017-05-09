@@ -57,6 +57,8 @@ app.ws('/', (ws) => {
     .then(videos => ws.send(wsMessageObject(updateAllVideos, { videos })));
 });
 
+const serverStatic = videosPath => app.use('/static', express.static(videosPath));
+
 /**
  * Roda o servidor HTTP
  */
@@ -68,7 +70,10 @@ const runServer = () => app.listen(SERVER_PORT, () => {
  * Carregando configurações, assistindo arquivos e rodando servidor
  */
 loadConfig()
-  .then(config => watchIn(config.videosPath, wsApp))
+  .then(config => {
+    watchIn(config.videosPath, wsApp);
+    serverStatic(config.videosPath);
+  })
   .then(() => addConfigObserver(
     'videosPath',
     (videosPath) => watchIn(videosPath, wsApp)))
@@ -79,5 +84,6 @@ loadConfig()
         wsMessageObject(
           updateAllVideos,
           { videos }), wsApp))))
+  .then(() => addConfigObserver('videosPath', serverStatic))
   .then(runServer)
   .catch(console.error);
