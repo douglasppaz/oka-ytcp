@@ -1,5 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import values from 'lodash-es/values';
 import Layout from '../components/Layout';
 import VideoCard from '../components/VideoCard';
 import SearchField from '../components/SearchField';
@@ -19,7 +20,7 @@ class Home extends React.Component {
   render() {
     const { videos } = this.props;
     const { query } = this.state;
-    const videosCard = videos.map((video) => (
+    const videosCard = values(videos).map((video) => (
       <VideoCard
         key={video.id}
         video={video}
@@ -47,11 +48,9 @@ class Home extends React.Component {
 }
 
 Home.propTypes = {
-  videos: PropTypes.array,
+  videos: PropTypes.object,
 };
 
-const mapStateToProps = state => ({
-  videos: state.videos,
-});
+const mapStateToProps = ({ videos }) => ({ videos });
 
 export default connect(mapStateToProps)(Home);
