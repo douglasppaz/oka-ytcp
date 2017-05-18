@@ -17,6 +17,11 @@ class Home extends React.Component {
     this.setState({ query });
   }
 
+  doPlay(videoId) {
+    const { playNow } = this.context;
+    playNow(videoId);
+  }
+
   render() {
     const { videos } = this.props;
     const { query } = this.state;
@@ -26,7 +31,7 @@ class Home extends React.Component {
         video={video}
         actions={[
           {
-            fn: () => {},
+            fn: () => { this.doPlay(video.id); },
             icon: 'play_arrow'
           },
           {
@@ -49,6 +54,10 @@ class Home extends React.Component {
 
 Home.propTypes = {
   videos: PropTypes.object,
+};
+
+Home.contextTypes = {
+  playNow: PropTypes.func,
 };
 
 const mapStateToProps = ({ videos }) => ({ videos });
